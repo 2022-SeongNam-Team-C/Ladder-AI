@@ -5,11 +5,12 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
-model = torch.load('./modeling.pth', map_location='cpu')
+model = torch.load('./ORGINAL_MODEL.pt', map_location='cpu')
 
 @app.route('/')
 def hello():
-    return jsonify(model)
+    print(model)
+    return "모델 생성"
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
