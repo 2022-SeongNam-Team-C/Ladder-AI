@@ -22,14 +22,12 @@ from werkzeug.utils import secure_filename
 bp = Blueprint('model', __name__, url_prefix='/api/v1')
 
 def make_photo(img_url):
-    img = wget.download(img_url)
-    img_name = img.filename
+    img = wget.download(img_url)   # image name
     model = create_model("Unet_2020-07-20")
-    # model.eval();
+    model.eval()
     image = load_rgb(img)
     transform = albu.Compose([albu.Normalize(p=1)], p=1)
-    # imshow(image)
-    cv2.imwrite(img_name, image)
+    cv2.imwrite('user1.jpg', image)    # insert name randomly
     padded_image, pads = pad(image, factor=32, border=cv2.BORDER_CONSTANT)
     x = transform(image=padded_image)["image"]
     x = torch.unsqueeze(tensor_from_rgb_image(x), 0)
@@ -39,16 +37,11 @@ def make_photo(img_url):
     
     mask = (prediction > 0).cpu().numpy().astype(np.uint8)
     mask = unpad(mask, pads)
-    # print(mask.shape)
-    # imshow(mask)
-    # print(mask.shape)
+
     mask1 = cv2.cvtColor(mask, cv2.COLOR_GRAY2RGB) * (255, 255, 255)
-    # imshow(mask1)
-    # print(mask1.shape)
-    cv2.imwrite(img_name, mask)
-    # print(mask.shape)
+
+    cv2.imwrite('back1.jpg', mask)
     dst = cv2.addWeighted(image, 1, (cv2.cvtColor(mask, cv2.COLOR_GRAY2RGB) * (255, 0, 0)).astype(np.uint8), 0.2, 0)
-    # plt.imshow(dst)
 
     remove = mask1 + dst
     # print(remove.shape)  ###630, 1200, 3 ->255가 아닌 값들은 전부다 255로 바꿔버리고 255가 맞는것들은 0으로
@@ -136,7 +129,7 @@ def make_photo(img_url):
     fix_img = cv2.cvtColor(add, cv2.COLOR_BGR2RGB)
 
     # plt.imshow(fix_img)
+    cv2.imwrite('EEE777.jpg', fix_img)   
+    return send_file('EEE777.jpg', mimetype='image/')
 
-    return send_file(cv2.imwrite('EEE777.jpg', fix_img), mimetype='image/')
-
-   # return cv2.imwrite('EEE777.jpg', fix_img)
+   
