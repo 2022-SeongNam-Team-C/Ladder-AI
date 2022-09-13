@@ -1,4 +1,13 @@
 flask==2.0.2
 gunicorn
+albumentations
+iglovikov_helper_functions
+pytorch_lightning
+pytorch_toolbelt
+segmentation-models-pytorch
 torch
-numpy
+tqdm
+people_segmentation
+opencv-python
+matplotlib
+wget
