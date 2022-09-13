@@ -1,23 +1,17 @@
-from flask import Flask, request, send_file
-from werkzeug.utils import secure_filename
-from .models import model_module
+from flask import Flask, request
+from models.model_module import make_photo
 
-
-app = Flask(__name__)
-
-model = torch.load('./ORGINAL_MODEL.pt', map_location='cpu')
-
+app = Flask(__name__) 
 @app.route('/api/v1/images/result', methods=['GET', 'POST'])
 def hello():
     if request.method == 'GET':
-        print(model)
+        # print(model)
         return "모델 생성"
     if request.method == 'POST':
-        #file = request.files['img']
-        #fileName = file.filename
-        #file.save(secure_filename(file.filename))
-        # return send_file(fileName, mimetype='image/')
-        model_module.make_photo('https://news.mt.co.kr/mtview.php?no=2015040510223180585')
+        params = request.get_json()
+        print(params['img'])
+        return make_photo(params['img'])
+        # return 'ok'
         
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

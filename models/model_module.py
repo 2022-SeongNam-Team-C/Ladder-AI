@@ -16,8 +16,10 @@ import urllib.request
 from iglovikov_helper_functions.utils.image_utils import load_rgb, pad, unpad
 from iglovikov_helper_functions.dl.pytorch.utils import tensor_from_rgb_image
 from people_segmentation.pre_trained_models import create_model
-from flask import Flask, request, send_file
+from flask import Flask, request, send_file, Blueprint
 from werkzeug.utils import secure_filename
+
+bp = Blueprint('model', __name__, url_prefix='/api/v1')
 
 def make_photo(img_url):
     img = wget.download(img_url)
