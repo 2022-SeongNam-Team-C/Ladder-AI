@@ -19,6 +19,8 @@ from people_segmentation.pre_trained_models import create_model
 from flask import Flask, request, send_file, Blueprint
 from werkzeug.utils import secure_filename
 
+from datetime import datetime
+
 bp = Blueprint('model', __name__, url_prefix='/api/v1')
 
 def make_photo(img_url):
@@ -125,11 +127,12 @@ def make_photo(img_url):
 
 
     add = cv2.addWeighted(background, 0.39, overlay, 0.56, 0.52)
-
     fix_img = cv2.cvtColor(add, cv2.COLOR_BGR2RGB)
-
     # plt.imshow(fix_img)
-    cv2.imwrite('EEE777.jpg', fix_img)   
-    return send_file('EEE777.jpg', mimetype='image/')
+    days = datetime.today()
+    file_name = days.strftime('%y_%m_%d') + '.jpg'
+    print(file_name)
+    cv2.imwrite(file_name, fix_img)   
+    return send_file(file_name, mimetype='image/')
 
    
