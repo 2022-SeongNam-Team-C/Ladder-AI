@@ -12,3 +12,4 @@ opencv-python
 matplotlib
 wget
 datetime
+people_segmentation

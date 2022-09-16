@@ -1,5 +1,5 @@
 from flask import Flask, request
-from models.model_module import make_photo
+from models.model_module_2 import make_photo
 
 app = Flask(__name__) 
 @app.route('/api/v1/images/result', methods=['POST'])

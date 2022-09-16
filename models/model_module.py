@@ -130,7 +130,7 @@ def make_photo(img_url):
     fix_img = cv2.cvtColor(add, cv2.COLOR_BGR2RGB)
     # plt.imshow(fix_img)
     days = datetime.today()
-    file_name = days.strftime('%y_%m_%d') + '.jpg'
+    file_name = days.strftime('%Y-%m-%d-%H-%M-%S') + '-user_id.jpg'
     print(file_name)
     cv2.imwrite(file_name, fix_img)   
     return send_file(file_name, mimetype='image/')
