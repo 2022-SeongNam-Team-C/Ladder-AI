@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[52]:
+# In[2]:
 
 
 from pylab import imshow
@@ -26,45 +26,45 @@ from PIL import Image
 import urllib.request
 
 
-# In[53]:
+# In[3]:
 
 
 from iglovikov_helper_functions.utils.image_utils import load_rgb, pad, unpad
 from iglovikov_helper_functions.dl.pytorch.utils import tensor_from_rgb_image
 
 
-# In[77]:
+# In[33]:
 
 
-url ="https://img1.daumcdn.net/thumb/C280x280.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/5Yrf/image/OcH-os8rILJt7DUOK0jHYSHe2BY.JPG"
+url ="https://scontent-gmp1-1.xx.fbcdn.net/v/t1.6435-9/119597257_3257597544325980_4526091891296199674_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=8bfeb9&_nc_ohc=lMClvjzTiTkAX_q20qa&_nc_ht=scontent-gmp1-1.xx&oh=00_AT9oo5DrMikwenpgn_aduyHPI3N7O_ugFI9fd0GToZD3NA&oe=634A467A"
 wget.download(url)
 
 
-# In[78]:
+# In[34]:
 
 
 pip install people_segmentation
 
 
-# In[79]:
+# In[35]:
 
 
 from people_segmentation.pre_trained_models import create_model
 
 
-# In[80]:
+# In[36]:
 
 
 model = create_model("Unet_2020-07-20")
 
 
-# In[81]:
+# In[37]:
 
 
 model.eval();
 
 
-# In[82]:
+# In[38]:
 
 
 def resize_crop(image):
@@ -116,24 +116,31 @@ def resize_minmask(image):
     return image
 
 
-# In[83]:
+
+# In[39]:
 
 
 def resize_select(image):
     h, w, c = np.shape(image)
-    if h > 720:
+    if min(h, w, c) > 720:
         return resize_crop(image)
     else:  
         return resize_mincrop(image)
 
 
-# In[84]:
+# In[40]:
 
 
-image1 = load_rgb('download (6).wget')
+image1 = load_rgb('119597257_3257597544325980_4526091891296199674_n.jpg')
 
 
-# In[85]:
+# In[41]:
+
+
+print(np.shape(image1))
+
+
+# In[42]:
 
 
 image = resize_select(image1)
@@ -143,7 +150,7 @@ plt.imshow(image1)
 ###(720, 960, 3)
 
 
-# In[86]:
+# In[43]:
 
 
 cv2.imwrite('pop.jpg', image)
@@ -153,13 +160,13 @@ print(image.shape)
  
 
 
-# In[87]:
+# In[44]:
 
 
 transform = albu.Compose([albu.Normalize(p=1)], p=1)
 
 
-# In[88]:
+# In[45]:
 
 
 cv2.imwrite('pop1.jpg', image1)###사이즈 변경하지
@@ -167,72 +174,72 @@ cv2.imwrite('pop1.jpg', image1)###사이즈 변경하지
 imshow(image1)
 
 
-# In[89]:
+# In[46]:
 
 
 imshow(image1)
 print(image1.shape)
 
 
-# In[90]:
+# In[47]:
 
 
 padded_image, pads = pad(image1, factor=32, border=cv2.BORDER_CONSTANT)
 
 
-# In[91]:
+# In[48]:
 
 
 x = transform(image=padded_image)["image"]
 x = torch.unsqueeze(tensor_from_rgb_image(x), 0)
 
 
-# In[92]:
+# In[49]:
 
 
 with torch.no_grad():
   prediction = model(x)[0][0]
 
 
-# In[93]:
+# In[50]:
 
 
 mask = (prediction > 0).cpu().numpy().astype(np.uint8)
 
 
-# In[94]:
+# In[51]:
 
 
 mask = unpad(mask, pads)
 
 
-# In[95]:
+# In[52]:
 
 
 imshow(mask)
 
 
-# In[96]:
+# In[53]:
 
 
 def resize_select_mask(mask):
     h, w = np.shape(mask)
     np.shape(mask)
-    if h < 720:
+    if min(h, w) < 720:
         return resize_minmask(mask)
     else: 
          return resize_mask(mask)
 
 
-# In[97]:
+# In[54]:
 
 
-mask10 = resize_select_mask(mask)
+mask10 = resize_minmask(mask)
 plt.imshow(mask10)
 print(mask10.shape)
 
 
-# In[98]:
+# In[55]:
 
 
 ###_____________________________________________________ ____________________________________________________
@@ -354,7 +361,7 @@ if __name__ == '__main__':
     axes[1].imshow(img)
 
 
-# In[99]:
+# In[56]:
 
 
 background = np.array(Image.open('pop.jpg'))
@@ -383,7 +390,7 @@ plt.imshow(background)
 print(background.shape)
 
 
-# In[100]:
+# In[57]:
 
 
 _, alpha = cv2.threshold(mask10, 0, 255, cv2.THRESH_BINARY)
@@ -402,7 +409,7 @@ axes[1].imshow(foreground.astype(np.uint8))
 axes[2].imshow(background.astype(np.uint8))
 
 
-# In[101]:
+# In[58]:
 
 
 result = cv2.add(foreground, background).astype(np.uint8)
@@ -412,7 +419,7 @@ fix_img = cv2.cvtColor(result, cv2.COLOR_BGR2RGB)
 plt.imshow(fix_img)
 
 
-# In[102]:
+# In[59]:
 
 
 plt.imshow(fix_img)
