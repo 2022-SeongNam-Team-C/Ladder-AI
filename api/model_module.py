@@ -12,6 +12,8 @@ import tensorflow as tf
 import torch.nn as nn
 from tqdm import tqdm
 from torch.nn import functional as F
+import base64
+import json
 ##______
 import requests
 from io import BytesIO
@@ -263,5 +265,21 @@ def make_photo(img_url):
     days = datetime.today()
     file_name = days.strftime('%Y-%m-%d-%H-%M-%S') + '-user_id.jpg'
     print(file_name)
-    cv2.imwrite(file_name, result)   
-    return send_file(file_name, mimetype='image/')
+
+    image_binary = result
+    encoded_string = base64.b64encode(image_binary)
+
+    image_dict = {
+            "test_image_name": file_name,
+            "test_image.png": encoded_string.decode()
+        }
+    image_json = json.dumps(image_dict)
+        
+    return image_json
+
+    ''''cv2.imwrite(file_name, result)   
+    return send_file(file_name, mimetype='image/')'''
+
+
+
+  
