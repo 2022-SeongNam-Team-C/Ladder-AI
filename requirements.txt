@@ -13,3 +13,5 @@ matplotlib
 wget
 datetime
 tensorflow
+werkzeug==2.1.2
+flask_restx
