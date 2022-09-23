@@ -7,9 +7,9 @@ from flask_restx import Api, Resource
 
 app = Flask(__name__) 
 api = Api(app, version=1.0, title="ladder api", description='ladder api docs', doc='/api-docs')  # Flask 객체에 Api 객체 등록
-ladder_api = api.namespace('ladder_ai', description='ladder api docs')
+ladder_api = api.namespace('api/v1', description='ladder api docs')
 
-@ladder_api.route('/api/v1/images/result')
+@ladder_api.route('/images/result')
 class createimage(Resource):
     def post(self):
         params = request.get_json() ## 이미지 url 받아오기

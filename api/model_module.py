@@ -263,23 +263,8 @@ def make_photo(img_url):
     # fix_img = cv2.cvtColor(result, cv2.COLOR_BGR2RGB)    # result image
     # plt.imshow(fix_img)
     days = datetime.today()
-    file_name = days.strftime('%Y-%m-%d-%H-%M-%S') + '-user_id.jpg'
+    file_name = days.strftime('%Y-%m-%d-%H-%M-%S') + '.jpg'
     print(file_name)
 
-    image_binary = result
-    encoded_string = base64.b64encode(image_binary)
-
-    image_dict = {
-            "test_image_name": file_name,
-            "test_image.png": encoded_string.decode()
-        }
-    image_json = json.dumps(image_dict)
-        
-    return image_json
-
-    ''''cv2.imwrite(file_name, result)   
-    return send_file(file_name, mimetype='image/')'''
-
-
-
-  
+    cv2.imwrite(file_name, result)   
+    return send_file(file_name, mimetype='image/')
