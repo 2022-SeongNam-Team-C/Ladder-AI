@@ -29,7 +29,8 @@ import torchvision.models as torch_model
 
 # path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'weight.pth')
 # weight = torch.load('./weight.pth', map_location='cpu')
-weight = torch.load('./models/weight.pth')
+weight = torch.load('./models/weight.pth', map_location='cpu')
+
 
 def resize_crop(image):
     h, w, c = np.shape(image)
