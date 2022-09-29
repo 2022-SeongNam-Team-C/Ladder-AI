@@ -258,14 +258,19 @@ def make_photo(img_url):
 
     fig, axes = plt.subplots(1, 3, figsize=(20, 10))
 
-    result = cv2.add(foreground, background).astype(np.uint8)
-
+    result_image = cv2.add(foreground, background).astype(np.uint8)
     plt.figure(figsize=(12, 12))
-    # fix_img = cv2.cvtColor(result, cv2.COLOR_BGR2RGB)    # result image
-    # plt.imshow(fix_img)
-    days = datetime.today()
-    file_name = days.strftime('%Y-%m-%d-%H-%M-%S') + '.jpg'
-    print(file_name)
+    file_name = 'convertedImage.jpg'
 
-    cv2.imwrite(file_name, result)   
-    return send_file(file_name, mimetype='image/')
+    image_binary = result_image
+    encoded_string = base64.b64encode(image_binary)
+
+    image_dict = {
+            "img_name": file_name,
+            "img": encoded_string.decode()
+        }
+    image_json = json.dumps(image_dict)
+        
+    return image_json
+
+    
