@@ -10,6 +10,6 @@ RUN pip install -r requirements.txt
 RUN apt-get update
 RUN apt-get -y install libgl1-mesa-glx
 
-EXPOSE 5000
+EXPOSE 5555
 
 CMD [ "python", "app.py" ]

@@ -29,7 +29,7 @@ import torchvision.models as torch_model
 
 # path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'weight.pth')
 # weight = torch.load('./weight.pth', map_location='cpu')
-weight = torch.load('./models/weight.pth')
+weight = torch.load('./models/weight.pth', map_location='cpu')
 
 def resize_crop(image):
     h, w, c = np.shape(image)
@@ -270,8 +270,8 @@ def make_photo(img_url):
     encoded_string = base64.b64encode(image_binary)
 
     image_dict = {
-            "test_image_name": file_name,
-            "test_image.png": encoded_string.decode()
+            "converted_image_name": file_name,
+            "converted_image.png": encoded_string.decode()
         }
     image_json = json.dumps(image_dict)
         
